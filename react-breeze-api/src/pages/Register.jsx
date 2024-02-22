@@ -17,7 +17,7 @@ const Register = () => {
     }
 
     return (
-<section className="bg-[#F4F7FF] py-20 lg:py-[40px]">
+        <section className="bg-[#F4F7FF] py-20 lg:py-[40px]">
             <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap">
                 <div className="w-full ">
@@ -164,9 +164,9 @@ const Register = () => {
                     Forgot Password?
                     </Link>
                     <p className="text-base text-[#adadad]">
-                    Not a member yet?
-                    <Link to="/login" className="text-primary hover:underline">
-                        Sign In
+                    Not a member yet? 
+                    <Link to="/login" className="text-[#4338CA] hover:underline">
+                         Sign In
                     </Link>
                     </p>
                 </div>

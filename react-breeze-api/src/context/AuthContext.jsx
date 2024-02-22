@@ -21,9 +21,10 @@ export const AuthProvider = ({children}) => {
         setErrors([]);
         try{
             
-            await axios.post("/login", data);
-            await getUser();
-            navigate("/");
+            const res = await axios.post("/login", data);
+            console.log(res);
+            // await getUser();
+            // navigate("/");
         }catch (e)
         {
             if(e.response.status === 422){

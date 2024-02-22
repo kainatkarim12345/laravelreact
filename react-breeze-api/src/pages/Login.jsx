@@ -117,7 +117,7 @@ const Login = () => {
                     </Link>
                     <p className="text-base text-[#adadad]">
                     Not a member yet?
-                    <Link to="/register" className="text-primary hover:underline">
+                    <Link to="/register" className="text-[#4338CA] hover:underline">
                         Sign Up
                     </Link>
                     </p>
