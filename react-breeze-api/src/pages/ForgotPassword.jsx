@@ -20,7 +20,7 @@ const ForgotPassword = () => {
         if (ex.response && ex.response.status === 422) {
           setErrors(ex.response.data.errors);
         } else {
-          console.error("An unexpected error occurred:", ex);
+          console.log("An unexpected error occurred:", ex);
          
         }
       }
