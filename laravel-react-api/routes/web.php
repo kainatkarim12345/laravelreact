@@ -16,19 +16,23 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 |
 */
 
-Route::post('/register', [RegisteredUserController::class, 'store'])
-                ->middleware('guest')
-                ->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store'])
+//                 ->middleware('guest')
+//                 ->name('register');
 
-// Route::get('/api/user', function(){
-    Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-        return $request->user();
-    });
-// });
 
-// Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/user', function (Request $request) { return $request->user(); });
+    Route::get('/addsurvey', function (Request $request) { $data = [
+        'message' => 'kkkkkkkkkkkkkkkk',
+        'status' => 'success',
+        // Any other data you want to include
+    ];
+
+    // JSON response with HTTP status code 200 (OK)
+    return response()->json($data, 200); });
+});
+Route::get('/addsurvey', function (Request $request) { dd('kkkkkkkkkk'); });
 
 
 Route::get('/', function () {
