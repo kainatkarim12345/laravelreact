@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use App\Models\Question;
+use App\Models\Option;
 
 class SurveyController extends Controller
 {
@@ -11,7 +13,7 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        dd('hihihi');
+        dd('SurveyController index');
         return view('AddSurvey');
     }
 
@@ -23,13 +25,51 @@ class SurveyController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'question' => 'required',
+            'question_type' => 'required|in:MCQs,Text Field,True/False',
+            'options.*' => 'required_if:question_type,MCQs',
+            'text_field' => 'required_if:question_type,Text Field',
+            'true_false' => 'required_if:question_type,True/False|in:True,False',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422); 
+        } else {
+            $question = Question::create([
+                'question' => $request->question,
+                'question_type' => $request->question_type,
+            ]);
+
+            if ($request->question_type === 'MCQs') {
+                foreach ($request->options as $optionText) {
+                    Option::create([
+                        'questions_id' => $question->id,
+                        'option_text' => $optionText,
+                    ]);
+                }
+            } elseif ($request->question_type === 'Text Field') {
+                Option::create([
+                    'questions_id' => $question->id,
+                    'option_text' => $request->text_field,
+                ]);
+            } elseif ($request->question_type === 'True/False') {
+                Option::create([
+                    'questions_id' => $question->id,
+                    'option_text' => $request->true_false,
+                ]);
+            }
+
+            return response()->json('Successfully saved');
+        }
     }
+
+
+
 
     /**
      * Display the specified resource.

@@ -19,9 +19,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
+    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:5173')],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['Content-Type', 'X-Requested-With','token','user_token','_token','X-CSRF-TOKEN'],
 
     'allowed_headers' => ['*'],
 

@@ -19,16 +19,6 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
                 ->middleware('guest')
                 ->name('password.email');
-Route::get('/addsurvey', function (){
-    $data = [
-        'message' => 'Ressssssssssssponse message goes here',
-        'status' => 'success',
-        // Any other data you want to include
-    ];
-
-    // JSON response with HTTP status code 200 (OK)
-    return response()->json($data, 200);
-});
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
                 ->middleware('guest')
