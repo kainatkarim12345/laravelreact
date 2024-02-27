@@ -1,5 +1,8 @@
 import { Route , Routes } from "react-router-dom";
 import Home from './pages/Home';
+import SurveyForm from './pages/SurveyForm';
+import ProfileForm from './pages/ProfileForm';
+import QuestionForm from "./pages/QuestionForm";
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from "./pages/ForgotPassword";
@@ -14,7 +17,11 @@ function App() {
         <Routes>
           <Route element={<AuthLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/surveyform" element={<SurveyForm />} />
+            <Route path="/profileform" element={<ProfileForm />} />
+            <Route path="/questionform" element={<QuestionForm />} />
           </Route>
+          
           <Route element={<GuestLayout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

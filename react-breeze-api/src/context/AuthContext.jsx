@@ -1,13 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const csrf = () => axios.get("/sanctum/csrf-cookie");
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('');
   const navigate = useNavigate();
 
   const getUser = async () => {
@@ -19,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
 
   const login = async ({ ...data }) => {
     await csrf();
@@ -51,6 +52,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+
+
+  const questionform = async ({ ...data }) => {
+    await csrf();
+    setErrors([]);
+    setStatus(null);
+    try {
+
+      const response = await axios.post("/questionform", data ); 
+      
+      if (response.status === 200) {
+        setStatus(response.data);
+      }
+    } catch (ex) {
+      if (ex.response && ex.response.status === 422) {
+        setErrors(ex.response.data.errors);
+      } else {
+        console.log("An unexpected error occurred:", ex);
+       
+      }
+    }
+  };
+
   const logout = () => {
     axios.post("/logout").then(() => {
       setUser(null);
@@ -65,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, errors, getUser, login, register, logout, csrf }}
+      value={{ user, errors, setErrors , getUser, login, register ,status, questionform , logout, csrf }}
     >
       {children}
     </AuthContext.Provider>
