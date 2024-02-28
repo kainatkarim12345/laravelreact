@@ -17,7 +17,7 @@ const ResetPassword = () => {
 
   useEffect(()=>{
     setEmail(searchParams.get("email"));
-    console.log(email);
+    // console.log(email);
   },[]);
 
   const handleSubmit = async (e) => {

@@ -1,15 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [questions, setQuestions] = useState(null);
   const csrf = () => axios.get("/sanctum/csrf-cookie");
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
   const navigate = useNavigate();
 
   const getUser = async () => {
@@ -21,14 +22,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getQuestions = async (surveyType) => {
+    try {
+      const response = await axios.get(`/getquestions?type=${surveyType}`);
+      setQuestions(response.data);
+    } catch (error) {
+      console.log("Error fetching questions:", error);
+    }
+  };
 
   const login = async ({ ...data }) => {
     await csrf();
     setErrors([]);
     try {
       const response = await axios.post("/login", data);
-
-     
       await getUser();
       navigate("/");
     } catch (e) {
@@ -52,16 +59,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
-
   const questionform = async ({ ...data }) => {
     await csrf();
     setErrors([]);
     setStatus(null);
     try {
+      const response = await axios.post("/questionform", data);
 
-      const response = await axios.post("/questionform", data ); 
-      
       if (response.status === 200) {
         setStatus(response.data);
       }
@@ -70,7 +74,6 @@ export const AuthProvider = ({ children }) => {
         setErrors(ex.response.data.errors);
       } else {
         console.log("An unexpected error occurred:", ex);
-       
       }
     }
   };
@@ -89,7 +92,20 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, errors, setErrors , getUser, login, register ,status, questionform , logout, csrf }}
+      value={{
+        user,
+        errors,
+        setErrors,
+        getUser,
+        getQuestions,
+        questions,
+        login,
+        register,
+        status,
+        questionform,
+        logout,
+        csrf,
+      }}
     >
       {children}
     </AuthContext.Provider>
