@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import useAuthContext from "../context/AuthContext";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const QuestionForm = () => {
   const [question, setQuestion] = useState("");
@@ -159,11 +160,13 @@ const QuestionForm = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full ">
             <div className="relative mx-auto max-w-[500px] overflow-hidden rounded-lg bg-white py-9 text-center sm:px-12 md:px-[60px]">
-              {status && (
-                <div className="bg-green-700 m-2 p-2 rounded text-white">
-                  {status}
-                </div>
-              )}
+            {status && (
+                  <div className="bg-green-700 m-2 p-2 rounded text-white">
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                      <Alert severity="success">{status}.</Alert>
+                    </Stack>
+                  </div>
+                )}
               <div className="mb-10 text-center md:mb-16">Add Questions</div>
               <form onSubmit={handleQuestion}>
                 <div className="mb-4">

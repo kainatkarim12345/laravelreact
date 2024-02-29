@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Outlet, Link } from "react-router-dom";
 import useAuthContext from "../context/AuthContext";
-import DropDownMenu1 from "../components/DropDownMenu1";
-import DropDownMenu2 from "../components/DropDownMenu2";
 import SurveyForm from "../pages/SurveyForm";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Fade from '@mui/material/Fade';
 
 const AuthLayout = () => {
   const { user, getUser, logout } = useAuthContext();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+
   useEffect(() => {
     if (!user) {
       getUser();
     }
   }, []);
-
-  const [openMenu1, setOpenMenu1] = useState(false);
-  const [openMenu2, setOpenMenu2] = useState(false);
-  const [showSurveyForm, setShowSurveyForm] = useState(false);
-
-  const handleMenu1Click = () => {
-    setOpenMenu1((prev) => !prev);
-  };
-
-  const handleMenu2Click = () => {
-    setOpenMenu2((prev) => !prev);
-  };
 
   return user ? (
     <>
@@ -35,24 +36,39 @@ const AuthLayout = () => {
           <div className="hidden w-full md:block md:w-auto">
             <ul className="mt-4 flex flex-col rounded-lg p-4 md:mt-0 md:flex-row md:space-x-8 md:text-sm md:font-medium">
             <li>
-                <span
-                  className="surveydropdown block rounded py-2 pr-4 pl-3 text-white"
-                  aria-current="page"
-                  onClick={handleMenu2Click}
+            <Button
+              id="fade-button"
+              aria-controls={open ? 'fade-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              style={{ color: 'white' }} 
+            >
+              Survey
+            </Button>
+                <Menu
+                  id="fade-menu"
+                  MenuListProps={{
+                    'aria-labelledby': 'fade-button',
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  TransitionComponent={Fade}
+                  
                 >
-                  Profile
-                </span>
-                {openMenu2 && <DropDownMenu2 onClose={handleMenu2Click} />}
-              </li>
-              <li>
-                <span
-                  className="surveydropdown block rounded py-2 pr-4 pl-3 text-white"
-                  aria-current="page"
-                  onClick={handleMenu1Click}
-                >
-                  Survey
-                </span>
-                {openMenu1 && <DropDownMenu1 onClose={handleMenu1Click} />}
+                  <MenuItem onClick={handleClose}>
+                    <Link to="/surveyform">
+                      Add Survey/Profile
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Link to="/questionform">
+                      Add Question
+                    </Link>
+                  </MenuItem>
+                </Menu>
+    
               </li>
               <li>
                 <button className="block rounded py-2 pr-4 pl-3 text-white" onClick={logout}>
@@ -63,7 +79,6 @@ const AuthLayout = () => {
           </div>
         </div>
       </nav>
-      {showSurveyForm && <SurveyForm />}
       <Outlet />
     </>
   ) : (

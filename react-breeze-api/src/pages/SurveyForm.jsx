@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import useAuthContext from "../context/AuthContext";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
+import dayjs from "dayjs";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,13 +16,15 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 const SurveyForm = () => {
   const [name, setName] = useState("");
   const [survey_type, setSurveyType] = useState("");
-  const [selectedQuestionId, setSelectedQuestionId] = useState("");
+  const [survey_status, setSurveyStatus] = useState("");
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [timer_duration, setTimerDuration] = useState("");
+  const [publish_at, setPublishAt] = useState("");
   const [price_within_timer, setPriceWithinTimer] = useState("");
   const [price_without_timer, setPriceWithoutTimer] = useState("");
   const [expire_at, setExpireAt] = useState("");
   const [showTimeDuration, setShowTimeDuration] = useState(false);
+  const [selectedQuestionsCount, setSelectedQuestionsCount] = useState(0);
   const {
     addsurvey,
     errors,
@@ -29,18 +35,26 @@ const SurveyForm = () => {
     questions,
   } = useAuthContext();
 
-
   const handleCheckboxChange = (questionId) => {
-    if (selectedQuestions.includes(questionId)) {
-      setSelectedQuestions(selectedQuestions.filter((id) => id !== questionId));
+    if (selectedQuestions.find((q) => q.id === questionId)) {
+      setSelectedQuestions(
+        selectedQuestions.filter((q) => q.id !== questionId)
+      );
+      setSelectedQuestionsCount(selectedQuestionsCount - 1);
     } else {
       setSelectedQuestions([...selectedQuestions, questionId]);
+      setSelectedQuestionsCount(selectedQuestionsCount + 1);
     }
   };
 
   const handleSurveyTypeChange = (event) => {
     const selectedSurveyType = event.target.value;
     setSurveyType(selectedSurveyType);
+
+    setSelectedQuestions([]);
+    setSelectedQuestionsCount(0);
+
+    setErrors({});
 
     if (selectedSurveyType === "survey") {
       setShowTimeDuration(true);
@@ -53,8 +67,112 @@ const SurveyForm = () => {
 
   const handleSurvey = async (event) => {
     event.preventDefault();
-    alert();
-    // addsurvey();
+    // setErrors({});
+    let isValid = true;
+    const newErrors = {};
+
+    if (!name) {
+      newErrors.name = ["Survey name is required"];
+      isValid = false;
+    }
+
+    if (!survey_type) {
+      newErrors.survey_type = ["Survey type is required"];
+      isValid = false;
+    }
+
+    if (survey_type === "profile" && selectedQuestionsCount < 2) {
+      newErrors.question_select = [
+        "Please select at least 2 questions for profile survey",
+      ];
+      isValid = false;
+    }
+
+    if (survey_type === "survey" && selectedQuestionsCount < 2) {
+      newErrors.question_select = [
+        "Please select at least 2 questions for survey",
+      ];
+      isValid = false;
+    }
+
+    if (!price_within_timer || price_within_timer <= 0) {
+      newErrors.price_within_timer = [
+        "Price within timer is required and must be greater than 0",
+      ];
+      isValid = false;
+    }
+    if (!price_without_timer || price_without_timer <= 0) {
+      newErrors.price_without_timer = [
+        "Price without timer is required and must be greater than 0",
+      ];
+      isValid = false;
+    }
+
+    if (survey_type === "survey") {
+      if (!timer_duration) {
+        newErrors.timer_duration = ["Timer duration is required"];
+        isValid = false;
+      }
+      if (!expire_at) {
+        newErrors.expire_at = ["Expire date is required"];
+        isValid = false;
+      }
+      if (!publish_at) {
+        newErrors.publish_at = ["Publish date is required"];
+        isValid = false;
+      }
+    }
+
+    if (!survey_status) {
+      newErrors.survey_status = ["Survey Status is required"];
+      isValid = false;
+    }
+
+    if (!isValid) {
+      setErrors(newErrors);
+      return;
+    }
+    let timer_duration_time = "";
+    let publish_at_time = "";
+    let expire_at_time = "";
+    if (survey_type === "survey") {
+      timer_duration_time = dayjs(timer_duration).format("YYYY-MM-DD HH:mm:ss");
+
+      publish_at_time = dayjs(publish_at).format("YYYY-MM-DD HH:mm:ss");
+
+      expire_at_time = dayjs(expire_at).format("YYYY-MM-DD HH:mm:ss");
+    }
+
+    const formData = {
+      name,
+      survey_type,
+      survey_status,
+      selectedQuestions,
+      ...(survey_type === "survey" && {
+        timer_duration: timer_duration_time,
+        expire_at: expire_at_time,
+        publish_at: publish_at_time,
+      }),
+      price_within_timer,
+      price_without_timer,
+    };
+
+    if (formData) {
+      console.log(formData);
+      addsurvey(formData);
+
+      setName("");
+      setSurveyType("");
+      setSurveyStatus("");
+      setSelectedQuestions([]);
+      setTimerDuration("");
+      setPublishAt("");
+      setPriceWithinTimer("");
+      setPriceWithoutTimer("");
+      setExpireAt("");
+      setShowTimeDuration(false);
+      setSelectedQuestionsCount(0);
+    }
   };
 
   useEffect(() => {
@@ -68,6 +186,11 @@ const SurveyForm = () => {
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full ">
+              <div className=" text-center md:mb-10">
+                <h1 className="text-2xl md:text-4xl font-bold">
+                  Create Survey
+                </h1>
+              </div>
             <div
               className="
                     relative
@@ -83,11 +206,15 @@ const SurveyForm = () => {
                     md:px-[60px]
                     "
             >
-              <div className="mb-10 text-center md:mb-16">
-                <h1 className="text-2xl md:text-4xl font-bold">
-                  Create Survey
-                </h1>
-              </div>
+              {status && (
+                  <div className="bg-green-700 m-2 p-2 rounded text-white">
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                      <Alert severity="success">{status}.</Alert>
+                    </Stack>
+                  </div>
+                )}
+              
+              
               <nav className="rounded bg-indigo-900 text-white px-2 py-2.5 sm:px-4">
                 <div className="container mx-auto flex flex-wrap items-center justify-between">
                   <Link
@@ -191,12 +318,18 @@ const SurveyForm = () => {
 
                   {survey_type !== "" && (
                     <div className="mb-4 md:mb-16">
-                      <div className="mb-10 text-center md:mb-16">
+                      <div className="mb-8 text-center md:mb-16">
                         <h3 className="text-1xl md:text-3xl font-bold">
                           Select Questions for {survey_type}
                         </h3>
                       </div>
-                      <p className="text-left text-lg font-medium text-slate-900"></p>
+                      {errors.question_select && (
+                        <div className="flex">
+                          <span className="text-red-400 text-sm">
+                            *{errors.question_select[0]}
+                          </span>
+                        </div>
+                      )}
                       <table className="table-auto w-full">
                         <thead>
                           <tr>
@@ -207,7 +340,7 @@ const SurveyForm = () => {
                         </thead>
                         <tbody>
                           {questions.map((question, index) => (
-                            <tr key={index}>
+                            <tr key={index} className="text-left">
                               <td className="border px-4 py-2">
                                 <input
                                   type="checkbox"
@@ -286,13 +419,6 @@ const SurveyForm = () => {
                           ))}
                         </tbody>
                       </table>
-                      {errors.question_select && (
-                        <div className="flex">
-                          <span className="text-red-400 text-sm">
-                            *{errors.question_select[0]}
-                          </span>
-                        </div>
-                      )}
                     </div>
                   )}
 
@@ -318,10 +444,18 @@ const SurveyForm = () => {
                               "
                             label="Set start timer"
                             value={timer_duration}
-                            onChange={(e) => setTimerDuration(e.target.value)}
+                            onChange={(value) => setTimerDuration(value)}
                           />
                         </DemoContainer>
                       </LocalizationProvider>
+
+                      {errors.timer_duration && (
+                        <div className="flex">
+                          <span className="text-red-400 text-sm">
+                            *{errors.timer_duration[0]}
+                          </span>
+                        </div>
+                      )}
 
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={["DateTimePicker"]}>
@@ -340,7 +474,7 @@ const SurveyForm = () => {
                                 "
                             label="Expire at"
                             value={expire_at}
-                            onChange={(e) => setExpireAt(e.target.value)}
+                            onChange={(value) => setExpireAt(value)}
                           />
                         </DemoContainer>
                       </LocalizationProvider>
@@ -377,31 +511,32 @@ const SurveyForm = () => {
                               focus-visible:shadow-none
                           "
                             label="Set start timer"
-                            value={timer_duration}
-                            onChange={(e) => setTimerDuration(e.target.value)}
+                            value={publish_at}
+                            onChange={(value) => setPublishAt(value)}
                           />
                         </DemoContainer>
                       </LocalizationProvider>
 
-                      {errors.timer_duration && (
+                      {errors.publish_at && (
                         <div className="flex">
                           <span className="text-red-400 text-sm">
-                            *{errors.timer_duration[0]}
+                            *{errors.publish_at[0]}
                           </span>
                         </div>
                       )}
                     </div>
                   )}
 
-                  <div className="mb-4">
-                    <p className="text-left text-sm font-medium text-slate-700">
-                      Price with In Timer
-                    </p>
-                    <input
-                      type="number"
-                      value={price_within_timer}
-                      onChange={(e) => setPriceWithinTimer(e.target.value)}
-                      className="
+                  {survey_type === "profile" && (
+                    <div className="mb-4">
+                      <p className="text-left text-sm font-medium text-slate-700">
+                        Price after profile completion
+                      </p>
+                      <input
+                        type="number"
+                        value={price_within_timer}
+                        onChange={(e) => setPriceWithinTimer(e.target.value)}
+                        className="
                               bordder-[#E9EDF4]
                               w-full
                               rounded-md
@@ -413,24 +548,60 @@ const SurveyForm = () => {
                               focus:border-primary
                               focus-visible:shadow-none
                           "
-                    />
-                    {errors.price_within_timer && (
-                      <div className="flex">
-                        <span className="text-red-400 text-sm">
-                          *{errors.price_within_timer[0]}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-4">
-                    <p className="text-left text-sm font-medium text-slate-700">
-                      Price with Out Timer
-                    </p>
-                    <input
-                      type="number"
-                      value={price_without_timer}
-                      onChange={(e) => setPriceWithoutTimer(e.target.value)}
-                      className="
+                      />
+                      {errors.price_within_timer && (
+                        <div className="flex">
+                          <span className="text-red-400 text-sm">
+                            *{errors.price_within_timer[0]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {survey_type === "survey" && (
+                    <div className="mb-4">
+                      <p className="text-left text-sm font-medium text-slate-700">
+                        Price within timer
+                      </p>
+                      <input
+                        type="number"
+                        value={price_within_timer}
+                        onChange={(e) => setPriceWithinTimer(e.target.value)}
+                        className="
+                              bordder-[#E9EDF4]
+                              w-full
+                              rounded-md
+                              border
+                              bg-[#FCFDFE]
+                              py-3
+                              px-5
+                              outline-nne
+                              focus:border-primary
+                              focus-visible:shadow-none
+                          "
+                      />
+                      {errors.price_within_timer && (
+                        <div className="flex">
+                          <span className="text-red-400 text-sm">
+                            *{errors.price_within_timer[0]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {survey_type === "profile" && (
+                    <div className="mb-4">
+                      <p className="text-left text-sm font-medium text-slate-700">
+                        Price before profile completion
+                      </p>
+
+                      <input
+                        type="number"
+                        value={price_without_timer}
+                        onChange={(e) => setPriceWithoutTimer(e.target.value)}
+                        className="
                               bordder-[#E9EDF4]
                               w-full
                               rounded-md
@@ -444,11 +615,86 @@ const SurveyForm = () => {
                               focus:border-primary
                               focus-visible:shadow-none
                           "
-                    />
-                    {errors.price_without_timer && (
+                      />
+                      {errors.price_without_timer && (
+                        <div className="flex">
+                          <span className="text-red-400 text-sm">
+                            *{errors.price_without_timer[0]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {survey_type === "survey" && (
+                    <div className="mb-4">
+                      <p className="text-left text-sm font-medium text-slate-700">
+                        Price without timer
+                      </p>
+
+                      <input
+                        type="number"
+                        value={price_without_timer}
+                        onChange={(e) => setPriceWithoutTimer(e.target.value)}
+                        className="
+                                bordder-[#E9EDF4]
+                                w-full
+                                rounded-md
+                                border
+                                bg-[#FCFDFE]
+                                py-3
+                                px-5
+                                text-base text-body-color
+                                placeholder-[#76787a]
+                                outline-none
+                                focus:border-primary
+                                focus-visible:shadow-none
+                            "
+                      />
+                      {errors.price_without_timer && (
+                        <div className="flex">
+                          <span className="text-red-400 text-sm">
+                            *{errors.price_without_timer[0]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="mb-4">
+                    <div className="flex items-center space-x-4">
+                      <label className="block text-body-color mt-4 mb-2">
+                        Survey status
+                      </label>
+                      <div className="items-center space-x-2">
+                        <input
+                          type="radio"
+                          value="active"
+                          checked={survey_status === "active"}
+                          onChange={() => setSurveyStatus("active")}
+                          className="form-radio h-4 w-4 text-primary border-primary focus:ring-primary"
+                        />
+                        <label className="text-sm text-body-color">
+                          Active
+                        </label>
+                      </div>
+                      <div className="items-center space-x-2">
+                        <input
+                          type="radio"
+                          value="deactive"
+                          checked={survey_status === "deactive"}
+                          onChange={() => setSurveyStatus("deactive")}
+                          className="form-radio h-4 w-4 text-primary border-primary focus:ring-primary"
+                        />
+                        <label className="text-sm text-body-color">
+                          Deactive
+                        </label>
+                      </div>
+                    </div>
+                    {errors.survey_status && (
                       <div className="flex">
                         <span className="text-red-400 text-sm">
-                          *{errors.price_without_timer[0]}
+                          *{errors.survey_status[0]}
                         </span>
                       </div>
                     )}

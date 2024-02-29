@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\SurveyController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
     
@@ -13,6 +14,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/getquestions', [QuestionController::class, 'getQuestions'])
              ->name('getquestions');
+
+    Route::post('/addsurvey', [SurveyController::class, 'store'])
+             ->name('addsurvey');
 
 });
 

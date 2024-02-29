@@ -104,10 +104,6 @@ class QuestionController extends Controller
             return response()->json('Successfully saved');
         }
     }
-
-
-
-
     /**
      * Display the specified resource.
      */

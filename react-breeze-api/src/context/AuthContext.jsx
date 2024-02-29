@@ -8,6 +8,7 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState(null);
+  const [survey, setSurveys] = useState(null);
   const csrf = () => axios.get("/sanctum/csrf-cookie");
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
@@ -78,6 +79,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const addsurvey = async ({ ...data }) => {
+    await csrf();
+    setErrors([]);
+    setStatus(null);
+    try {
+      const response = await axios.post("/addsurvey", data);
+
+      if (response.status === 200) {
+        setStatus(response.data);
+      }
+    } catch (ex) {
+      if (ex.response && ex.response.status === 422) {
+        setErrors(ex.response.data.errors);
+      } else {
+        console.log("An unexpected error occurred:", ex);
+      }
+    }
+  };
+
   const logout = () => {
     axios.post("/logout").then(() => {
       setUser(null);
@@ -103,6 +123,7 @@ export const AuthProvider = ({ children }) => {
         register,
         status,
         questionform,
+        addsurvey,
         logout,
         csrf,
       }}
