@@ -114,11 +114,11 @@ CREATE TABLE `options` (
   PRIMARY KEY (`id`),
   KEY `options_questions_id_foreign` (`questions_id`),
   CONSTRAINT `options_questions_id_foreign` FOREIGN KEY (`questions_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `options` */
 
-insert  into `options`(`id`,`questions_id`,`option_text`,`created_at`,`updated_at`) values (4,23,'False','2024-02-27 11:26:50','2024-02-27 11:26:50'),(5,24,'Rohtasgarh','2024-02-27 11:38:50','2024-02-27 11:38:50'),(6,24,'Sasaram','2024-02-27 11:38:50','2024-02-27 11:38:50'),(7,24,'Chausa','2024-02-27 11:38:50','2024-02-27 11:38:50'),(8,24,'Delhi','2024-02-27 11:38:50','2024-02-27 11:38:50'),(9,25,'Write here your name','2024-02-27 11:40:41','2024-02-27 11:40:41'),(10,26,'write here','2024-02-27 11:50:06','2024-02-27 11:50:06'),(11,27,'write here','2024-02-27 11:51:40','2024-02-27 11:51:40'),(12,28,'write here command','2024-02-27 11:53:18','2024-02-27 11:53:18'),(13,29,'True','2024-02-27 11:55:24','2024-02-27 11:55:24'),(14,30,'True','2024-02-27 12:00:24','2024-02-27 12:00:24'),(15,31,'write here','2024-02-28 06:06:26','2024-02-28 06:06:26'),(16,34,'25 years','2024-02-28 10:43:40','2024-02-28 10:43:40'),(17,34,'35 years','2024-02-28 10:43:40','2024-02-28 10:43:40'),(18,34,'40 years','2024-02-28 10:43:40','2024-02-28 10:43:40');
+insert  into `options`(`id`,`questions_id`,`option_text`,`created_at`,`updated_at`) values (4,23,'False','2024-02-27 11:26:50','2024-02-27 11:26:50'),(5,24,'Rohtasgarh','2024-02-27 11:38:50','2024-02-27 11:38:50'),(6,24,'Sasaram','2024-02-27 11:38:50','2024-02-27 11:38:50'),(7,24,'Chausa','2024-02-27 11:38:50','2024-02-27 11:38:50'),(8,24,'Delhi','2024-02-27 11:38:50','2024-02-27 11:38:50'),(9,25,'Write here your name','2024-02-27 11:40:41','2024-02-27 11:40:41'),(10,26,'write here','2024-02-27 11:50:06','2024-02-27 11:50:06'),(11,27,'write here','2024-02-27 11:51:40','2024-02-27 11:51:40'),(12,28,'write here command','2024-02-27 11:53:18','2024-02-27 11:53:18'),(13,29,'True','2024-02-27 11:55:24','2024-02-27 11:55:24'),(14,30,'True','2024-02-27 12:00:24','2024-02-27 12:00:24'),(15,31,'write here','2024-02-28 06:06:26','2024-02-28 06:06:26'),(16,34,'25 years','2024-02-28 10:43:40','2024-02-28 10:43:40'),(17,34,'35 years','2024-02-28 10:43:40','2024-02-28 10:43:40'),(18,34,'40 years','2024-02-28 10:43:40','2024-02-28 10:43:40'),(19,35,'8th class','2024-02-29 04:26:50','2024-02-29 04:26:50'),(20,35,'7th class','2024-02-29 04:26:50','2024-02-29 04:26:50'),(21,35,'6th class','2024-02-29 04:26:50','2024-02-29 04:26:50'),(22,35,'5th class','2024-02-29 04:26:50','2024-02-29 04:26:50'),(23,36,'Write here','2024-02-29 04:30:04','2024-02-29 04:30:04');
 
 /*Table structure for table `password_reset_tokens` */
 
@@ -185,11 +185,11 @@ CREATE TABLE `questions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `questions` */
 
-insert  into `questions`(`id`,`question`,`question_type`,`question_for`,`created_at`,`updated_at`) values (23,'The goat is the national animal of Scotland?','True/False','survey','2024-02-27 11:26:50','2024-02-27 11:26:50'),(24,'Where is the tomb of Sher Shah Suri located?','MCQs','survey','2024-02-27 11:38:50','2024-02-27 11:38:50'),(25,'What is Your Name?','Text Field','profile','2024-02-27 11:40:41','2024-02-27 11:40:41'),(26,'How Install Laravel?','Text Field','survey','2024-02-27 11:50:06','2024-02-27 11:50:06'),(27,'Create Migration','Text Field','survey','2024-02-27 11:51:40','2024-02-27 11:51:40'),(28,'Create Controller','Text Field','survey','2024-02-27 11:53:18','2024-02-27 11:53:18'),(29,'The DesktopDateTimePicker component which works best for mouse devices and large screens','True/False','survey','2024-02-27 11:55:24','2024-02-27 11:55:24'),(30,'The MobileDateTimePicker component which works best for touch devices and small screens.','True/False','survey','2024-02-27 12:00:24','2024-02-27 12:00:24'),(31,'How to Add New or Modify Old Values in Database?','Text Field','survey','2024-02-28 06:06:26','2024-02-28 06:06:26'),(34,'How old are you?','MCQs','profile','2024-02-28 10:43:40','2024-02-28 10:43:40');
+insert  into `questions`(`id`,`question`,`question_type`,`question_for`,`created_at`,`updated_at`) values (23,'The goat is the national animal of Scotland?','True/False','survey','2024-02-27 11:26:50','2024-02-27 11:26:50'),(24,'Where is the tomb of Sher Shah Suri located?','MCQs','survey','2024-02-27 11:38:50','2024-02-27 11:38:50'),(25,'What is Your Name?','Text Field','profile','2024-02-27 11:40:41','2024-02-27 11:40:41'),(26,'How Install Laravel?','Text Field','survey','2024-02-27 11:50:06','2024-02-27 11:50:06'),(27,'Create Migration','Text Field','survey','2024-02-27 11:51:40','2024-02-27 11:51:40'),(28,'Create Controller','Text Field','survey','2024-02-27 11:53:18','2024-02-27 11:53:18'),(29,'The DesktopDateTimePicker component which works best for mouse devices and large screens','True/False','survey','2024-02-27 11:55:24','2024-02-27 11:55:24'),(30,'The MobileDateTimePicker component which works best for touch devices and small screens.','True/False','survey','2024-02-27 12:00:24','2024-02-27 12:00:24'),(31,'How to Add New or Modify Old Values in Database?','Text Field','survey','2024-02-28 06:06:26','2024-02-28 06:06:26'),(34,'How old are you?','MCQs','profile','2024-02-28 10:43:40','2024-02-28 10:43:40'),(35,'In which class do you study?','MCQs','profile','2024-02-29 04:26:50','2024-02-29 04:26:50'),(36,'What is your nationality?','Text Field','profile','2024-02-29 04:30:04','2024-02-29 04:30:04');
 
 /*Table structure for table `referrals` */
 
@@ -266,9 +266,11 @@ CREATE TABLE `survey_question_links` (
   KEY `survey_question_links_survey_id_foreign` (`survey_id`),
   CONSTRAINT `survey_question_links_questions_id_foreign` FOREIGN KEY (`questions_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
   CONSTRAINT `survey_question_links_survey_id_foreign` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `survey_question_links` */
+
+insert  into `survey_question_links`(`id`,`questions_id`,`survey_id`,`created_at`,`updated_at`) values (1,23,4,'2024-02-29 11:33:59','2024-02-29 11:33:59'),(2,24,4,'2024-02-29 11:33:59','2024-02-29 11:33:59'),(3,26,4,'2024-02-29 11:33:59','2024-02-29 11:33:59'),(4,25,5,'2024-02-29 11:41:51','2024-02-29 11:41:51'),(5,34,5,'2024-02-29 11:41:51','2024-02-29 11:41:51'),(6,35,5,'2024-02-29 11:41:51','2024-02-29 11:41:51'),(7,35,6,'2024-02-29 11:50:11','2024-02-29 11:50:11'),(8,34,6,'2024-02-29 11:50:11','2024-02-29 11:50:11'),(9,26,7,'2024-02-29 11:51:25','2024-02-29 11:51:25'),(10,24,7,'2024-02-29 11:51:25','2024-02-29 11:51:25'),(11,23,7,'2024-02-29 11:51:25','2024-02-29 11:51:25'),(12,27,7,'2024-02-29 11:51:25','2024-02-29 11:51:25'),(13,28,7,'2024-02-29 11:51:25','2024-02-29 11:51:25');
 
 /*Table structure for table `surveys` */
 
@@ -281,18 +283,20 @@ CREATE TABLE `surveys` (
   `survey_type` enum('profile','survey') COLLATE utf8mb4_unicode_ci NOT NULL,
   `price_within_timer` int(11) NOT NULL,
   `price_without_timer` int(11) NOT NULL,
-  `start_time` timestamp NULL DEFAULT NULL,
-  `expire_at` timestamp NULL DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `published_at` timestamp NULL DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `expire_at` datetime DEFAULT NULL,
+  `is_active` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `published_at` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `surveys_added_by_foreign` (`added_by`),
   CONSTRAINT `surveys_added_by_foreign` FOREIGN KEY (`added_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `surveys` */
+
+insert  into `surveys`(`id`,`added_by`,`survey_name`,`survey_type`,`price_within_timer`,`price_without_timer`,`start_time`,`expire_at`,`is_active`,`published_at`,`created_at`,`updated_at`) values (1,1,'ttt','survey',43433,1212,'2024-02-24 12:00:00','2024-02-29 12:00:00','active','2024-02-29 14:00:00','2024-02-29 11:28:19','2024-02-29 11:28:19'),(2,1,'ttt','survey',43433,1212,'2024-02-24 12:00:00','2024-02-29 12:00:00','active','2024-02-29 14:00:00','2024-02-29 11:32:11','2024-02-29 11:32:11'),(3,1,'ttt','survey',43433,1212,'2024-02-24 12:00:00','2024-02-29 12:00:00','active','2024-02-29 14:00:00','2024-02-29 11:33:33','2024-02-29 11:33:33'),(4,1,'ttt','survey',43433,1212,'2024-02-24 12:00:00','2024-02-29 12:00:00','active','2024-02-29 14:00:00','2024-02-29 11:33:59','2024-02-29 11:33:59'),(5,1,'rewer','profile',22222,1111,NULL,NULL,'active',NULL,'2024-02-29 11:41:51','2024-02-29 11:41:51'),(6,1,'qqq','profile',22,1,NULL,NULL,'active',NULL,'2024-02-29 11:50:11','2024-02-29 11:50:11'),(7,1,'www','survey',222,11,'2024-02-29 01:00:00','2024-02-29 16:00:00','active','2024-02-29 12:05:00','2024-02-29 11:51:25','2024-02-29 11:51:25');
 
 /*Table structure for table `terms_and_conditions` */
 
