@@ -11,12 +11,47 @@ use Illuminate\Support\Facades\Auth;
 
 class SurveyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
+    }
+
+    public function getSurveysData()
+    {
+        $survey = DB::table('surveys')
+                    ->select('surveys.id as survey_id', 'surveys.*', 'surveys.created_at', 'users.*')
+                    ->join('users', 'users.id', '=', 'surveys.added_by')
+                    ->get();
+     
+        return response()->json($survey);
+    }
+
+    public function surveydetail(REQUEST $request){
+        $surveyId = $request->query('type');
+        $survey = Survey::whereId($surveyId)->first();
+
+        // $questions = DB::table('questions')
+        //             ->select('option.*','questions.*', 'question.id AS question_id')
+        //             ->join('options', 'options.questions_id', '=', 'questions.id')
+        //             ->select('questions.id as question_id', 'questions.question', 'questions.question_type', 'questions.question_for', 'options.option_text')
+        //             ->where('questions.question_for', '=', $surveyType)
+        //             ->get();
+
+        // $groupedQuestions = [];
+        // foreach ($questions as $question) {
+        //     $groupedQuestions[$question->question_id]['question'] = $question->question;
+        //     $groupedQuestions[$question->question_id]['question_id'] = $question->question_id;
+        //     $groupedQuestions[$question->question_id]['question_type'] = $question->question_type;
+        //     $groupedQuestions[$question->question_id]['question_for'] = $question->question_for;
+        //     $groupedQuestions[$question->question_id]['options'][] = $question->option_text;
+        // }
+
+        // $uniqueQuestions = array_values($groupedQuestions);
+
+        // return response()->json($uniqueQuestions);
+
+
+        return response()->json($survey);
     }
 
     /**

@@ -8,7 +8,8 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState(null);
-  const [survey, setSurveys] = useState(null);
+  const [surveydetail, setSurveyDetail] = useState(null);
+  const [surveys, setSurveys] = useState("");
   const csrf = () => axios.get("/sanctum/csrf-cookie");
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
@@ -32,6 +33,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getSurveyDetail = async (id) => {
+    try {
+      const response = await axios.get(`/surveydetail?type=${id}`);
+      setSurveyDetail(response.data);
+    } catch (error) {
+      console.log("Error fetching setSurveyDetail:", error);
+    }
+  };
+  
+
+  const getSurveysData = async () => {
+    try {
+      const response = await axios.get("/getsurveys");
+      setSurveys(response.data);
+    } catch (error) {
+      console.log("Error fetching surveys:", error);
+    }
+  };
+
   const login = async ({ ...data }) => {
     await csrf();
     setErrors([]);
@@ -39,9 +59,11 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post("/login", data);
       await getUser();
       navigate("/");
-    } catch (e) {
-      if (e.response.status === 422) {
-        setErrors(e.response.data.errors);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 422) {
+        setErrors(ex.response.data.errors);
+      } else {
+        console.log("An unexpected error occurred:", ex);
       }
     }
   };
@@ -119,6 +141,10 @@ export const AuthProvider = ({ children }) => {
         getUser,
         getQuestions,
         questions,
+        getSurveysData,
+        getSurveyDetail,
+        surveydetail,
+        surveys,
         login,
         register,
         status,

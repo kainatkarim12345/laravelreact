@@ -9,14 +9,11 @@ use App\Http\Controllers\SurveyController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
     
-    Route::post('/questionform', [QuestionController::class, 'store'])
-             ->name('questionform');
-
-    Route::get('/getquestions', [QuestionController::class, 'getQuestions'])
-             ->name('getquestions');
-
-    Route::post('/addsurvey', [SurveyController::class, 'store'])
-             ->name('addsurvey');
+    Route::post('/questionform', [QuestionController::class, 'store'])->name('questionform');
+    Route::get('/getquestions', [QuestionController::class, 'getQuestions'])->name('getquestions');
+    Route::post('/addsurvey', [SurveyController::class, 'store'])->name('addsurvey');
+    Route::get('/getsurveys', [SurveyController::class, 'getSurveysData'])->name('getsurveys');
+    Route::get('/surveydetail', [SurveyController::class, 'surveydetail'])->name('surveydetail');
 
 });
 
