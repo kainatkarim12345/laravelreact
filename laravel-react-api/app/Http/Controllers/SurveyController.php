@@ -13,7 +13,7 @@ class SurveyController extends Controller
 {
     public function index()
     {
-        //
+        
     }
 
     public function getSurveysData()
@@ -28,15 +28,17 @@ class SurveyController extends Controller
 
     public function surveydetail(REQUEST $request){
         $surveyId = $request->query('type');
-        $survey = Survey::whereId($surveyId)->first();
+        // $survey = Survey::whereId($surveyId)->first();
 
-        // $questions = DB::table('questions')
-        //             ->select('option.*','questions.*', 'question.id AS question_id')
-        //             ->join('options', 'options.questions_id', '=', 'questions.id')
-        //             ->select('questions.id as question_id', 'questions.question', 'questions.question_type', 'questions.question_for', 'options.option_text')
-        //             ->where('questions.question_for', '=', $surveyType)
-        //             ->get();
-
+        $survey = DB::table('survey_question_links')
+                    ->join('questions', 'questions.id', '=', 'survey_question_links.questions_id')
+                    ->join('surveys', 'surveys.id', '=', 'survey_question_links.survey_id')
+                    ->select('surveys.id as survey_id', 'questions.*', 'surveys.*')
+                    ->where('survey_question_links.survey_id', '=', $surveyId)
+                    ->get();
+                    
+        dd($survey);
+        
         // $groupedQuestions = [];
         // foreach ($questions as $question) {
         //     $groupedQuestions[$question->question_id]['question'] = $question->question;
