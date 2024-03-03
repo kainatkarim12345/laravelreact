@@ -10,6 +10,7 @@ use App\Http\Controllers\SurveyController;
 Route::middleware(['auth:sanctum'])->group(function(){
     
     Route::post('/questionform', [QuestionController::class, 'store'])->name('questionform');
+    Route::post('/termsform', [SurveyController::class, 'addterms'])->name('termsform');
     Route::get('/getquestions', [QuestionController::class, 'getQuestions'])->name('getquestions');
     Route::post('/addsurvey', [SurveyController::class, 'store'])->name('addsurvey');
     Route::get('/getsurveys', [SurveyController::class, 'getSurveysData'])->name('getsurveys');

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Survey;
+use App\Models\TermsAndCondition;
 use App\Models\SurveyQuestionLink;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,31 +29,18 @@ class SurveyController extends Controller
 
     public function surveydetail(REQUEST $request){
         $surveyId = $request->query('type');
-        // $survey = Survey::whereId($surveyId)->first();
 
         $survey = DB::table('survey_question_links')
-                    ->join('questions', 'questions.id', '=', 'survey_question_links.questions_id')
-                    ->join('surveys', 'surveys.id', '=', 'survey_question_links.survey_id')
-                    ->select('surveys.id as survey_id', 'questions.*', 'surveys.*')
-                    ->where('survey_question_links.survey_id', '=', $surveyId)
-                    ->get();
-                    
-        dd($survey);
-        
-        // $groupedQuestions = [];
-        // foreach ($questions as $question) {
-        //     $groupedQuestions[$question->question_id]['question'] = $question->question;
-        //     $groupedQuestions[$question->question_id]['question_id'] = $question->question_id;
-        //     $groupedQuestions[$question->question_id]['question_type'] = $question->question_type;
-        //     $groupedQuestions[$question->question_id]['question_for'] = $question->question_for;
-        //     $groupedQuestions[$question->question_id]['options'][] = $question->option_text;
-        // }
-
-        // $uniqueQuestions = array_values($groupedQuestions);
-
-        // return response()->json($uniqueQuestions);
-
-
+                ->join('questions', 'questions.id', '=', 'survey_question_links.questions_id')
+                ->join('surveys', 'surveys.id', '=', 'survey_question_links.survey_id')
+                ->leftJoin('options', function($join) {
+                    $join->on('options.questions_id', '=', 'survey_question_links.questions_id');
+                })
+                ->select('surveys.id as survey_id','surveys.is_active as is_active','questions.*', 'surveys.*', 'options.*')
+                ->where('survey_question_links.survey_id', '=', $surveyId)
+                ->distinct('survey_question_links.questions_id')
+                ->get();
+    
         return response()->json($survey);
     }
 
@@ -136,9 +124,25 @@ class SurveyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function addterms(REQUEST $request)
     {
-        //
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'terms_text' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422); 
+        } else {
+            $term = TermsAndCondition::create([
+                'terms_text' => htmlspecialchars($request->textterm),
+            ]);
+            // dd($term);
+
+            return response()->json('Terms Created');
+        }
     }
 
     /**

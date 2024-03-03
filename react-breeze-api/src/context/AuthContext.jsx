@@ -82,6 +82,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const termsform = async ({ ...data }) => {
+    await csrf();
+    setErrors([]);
+    setStatus(null);
+    try {
+      const response = await axios.post("/termsform", data);
+
+      if (response.status === 200) {
+        setStatus(response.data);
+      }
+    } catch (ex) {
+      if (ex.response && ex.response.status === 422) {
+        setErrors(ex.response.data.errors);
+      } else {
+        console.log("An unexpected error occurred:", ex);
+      }
+    }
+  };
+
   const questionform = async ({ ...data }) => {
     await csrf();
     setErrors([]);
@@ -149,6 +168,7 @@ export const AuthProvider = ({ children }) => {
         register,
         status,
         questionform,
+        termsform,
         addsurvey,
         logout,
         csrf,

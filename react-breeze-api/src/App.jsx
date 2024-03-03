@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import SurveyForm from './pages/SurveyForm';
 import ProfileForm from './pages/ProfileForm';
 import QuestionForm from "./pages/QuestionForm";
+import TermsForm from "./pages/TermsForm";
 import GetSurveys from "./pages/GetSurveys";
 import SurveyDetail from "./pages/SurveyDetail";
 import Login from './pages/Login';
@@ -22,6 +23,7 @@ function App() {
             <Route path="/surveyform" element={<SurveyForm />} />
             <Route path="/profileform" element={<ProfileForm />} />
             <Route path="/questionform" element={<QuestionForm />} />
+            <Route path="/termsform" element={<TermsForm />} />
             <Route path="/getsurveys" element={<GetSurveys />} />
             <Route path="/surveydetail/:id" element={<SurveyDetail />} />
           </Route>

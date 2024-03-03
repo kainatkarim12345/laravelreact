@@ -32,6 +32,15 @@ const AuthLayout = () => {
     setAnchorEl1(null);
   };
 
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+  const open2 = Boolean(anchorEl2);
+  const handleClick2 = (event) => {
+    setAnchorEl2(event.currentTarget);
+  };
+  const handleClose2 = () => {
+    setAnchorEl2(null);
+  };
+
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       backgroundColor: "#44b700",
@@ -119,6 +128,38 @@ const AuthLayout = () => {
                 </Menu>
               </li>
               <li>
+                <Button
+                  id="fade-button"
+                  aria-controls={open ? "fade-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClick2}
+                  style={{ color: "white" }}
+                >
+                  Users
+                </Button>
+                <Menu
+                  id="fade-menu"
+                  MenuListProps={{
+                    "aria-labelledby": "fade-button",
+                  }}
+                  anchorEl={anchorEl2}
+                  open={open2}
+                  onClose={handleClose2}
+                  TransitionComponent={Fade}
+                >
+                  <MenuItem onClick={handleClose2}>
+                    <Link to="/getusers">Users</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose2}>
+                    <Link to="/userform">Add User</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose2}>
+                    <Link to="#">Add refferal</Link>
+                  </MenuItem>
+                </Menu>
+              </li>
+              <li>
                 <Stack
                   direction="row"
                   spacing={2}
@@ -148,7 +189,10 @@ const AuthLayout = () => {
                   TransitionComponent={Fade}
                 >
                   <MenuItem onClick={handleClose1}>
-                    <Button onClick={logout}>Logout</Button>
+                    <Link to="/termsform">Terms Condition</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose1}>
+                    <Link onClick={logout}>Logout</Link>
                   </MenuItem>
                 </Menu>
               </li>
