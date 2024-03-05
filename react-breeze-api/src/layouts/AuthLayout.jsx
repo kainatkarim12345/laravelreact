@@ -189,7 +189,10 @@ const AuthLayout = () => {
                   TransitionComponent={Fade}
                 >
                   <MenuItem onClick={handleClose1}>
-                    <Link to="/termsform">Terms Condition</Link>
+                    <Link to="/roles">Role</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose1}>
+                    <Link to="/terms">Terms Condition</Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose1}>
                     <Link onClick={logout}>Logout</Link>

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import useAuthContext from "../context/AuthContext";
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
 
 const TermsForm = () => {
   const [textterm, setTextTerm] = useState("");
-  const { termsform, errors, status, setErrors } = useAuthContext();
+  const [status, setStatus] = useState("Terms and conditions created");
+
+
+  const { termsform, errors, setErrors } = useAuthContext();
 
   
 
@@ -18,15 +19,29 @@ const TermsForm = () => {
 
   const handleTerms = async (event) => {
     event.preventDefault();
-
+  
     if (!textterm.trim()) {
       setErrors({ textterm: ["Field is required."] });
       return;
     }
 
-    termsform({textterm});
+    try {
+      await termsform({ textterm });
+
+      swal({
+        position: "top-end",
+        icon: "success",
+        title: status,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      setTextTerm("");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
 
   };
+  
 
   return (
     <section className="bg-[#F4F7FF] py-20 lg:py-[40px]">
@@ -34,13 +49,6 @@ const TermsForm = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full ">
             <div className="relative mx-auto max-w-[500px] overflow-hidden rounded-lg bg-white py-9 text-center sm:px-12 md:px-[60px]">
-            {status && (
-                  <div className="bg-green-700 m-2 p-2 rounded text-white">
-                    <Stack sx={{ width: '100%' }} spacing={2}>
-                      <Alert severity="success">{status}.</Alert>
-                    </Stack>
-                  </div>
-                )}
               <div className="mb-10 text-center md:mb-16">Terms and condition</div>
               <form onSubmit={handleTerms}>
                 <div className="mb-4">

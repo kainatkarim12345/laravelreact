@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import swal from 'sweetalert';
 
 const AuthContext = createContext({});
 
@@ -9,7 +10,11 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [questions, setQuestions] = useState(null);
   const [surveydetail, setSurveyDetail] = useState(null);
+  const [roledetail, setRoleDetail] = useState(null);
   const [surveys, setSurveys] = useState("");
+  const [terms, setTerms] = useState("");
+  const [permissions, setPermissions] = useState("");
+  const [roles, setRoles] = useState("");
   const csrf = () => axios.get("/sanctum/csrf-cookie");
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
@@ -41,7 +46,16 @@ export const AuthProvider = ({ children }) => {
       console.log("Error fetching setSurveyDetail:", error);
     }
   };
-  
+
+  const getRoleDetail = async (id) => {
+    try {
+      const response = await axios.get(`/roledetail?type=${id}`);
+      // console.log(response.data);
+      setRoleDetail(response.data);
+    } catch (error) {
+      console.log("Error fetching setRoleDetail:", error);
+    }
+  };  
 
   const getSurveysData = async () => {
     try {
@@ -49,6 +63,33 @@ export const AuthProvider = ({ children }) => {
       setSurveys(response.data);
     } catch (error) {
       console.log("Error fetching surveys:", error);
+    }
+  };
+
+  const getTermsData = async () => {
+    try {
+      const response = await axios.get("/getterms");
+      setTerms(response.data);
+    } catch (error) {
+      console.log("Error fetching terms:", error);
+    }
+  };
+
+  const getRolesData = async () => {
+    try {
+      const response = await axios.get("/getroles");
+      setRoles(response.data);
+    } catch (error) {
+      console.log("Error fetching role:", error);
+    }
+  };
+
+  const getPermissionsData = async () => {
+    try {
+      const response = await axios.get("/getpermissions");
+      setPermissions(response.data);
+    } catch (error) {
+      console.log("Error fetching role:", error);
     }
   };
 
@@ -87,11 +128,8 @@ export const AuthProvider = ({ children }) => {
     setErrors([]);
     setStatus(null);
     try {
-      const response = await axios.post("/termsform", data);
-
-      if (response.status === 200) {
-        setStatus(response.data);
-      }
+      await axios.post("/termsform", data);
+      await getTermsData();
     } catch (ex) {
       if (ex.response && ex.response.status === 422) {
         setErrors(ex.response.data.errors);
@@ -106,11 +144,7 @@ export const AuthProvider = ({ children }) => {
     setErrors([]);
     setStatus(null);
     try {
-      const response = await axios.post("/questionform", data);
-
-      if (response.status === 200) {
-        setStatus(response.data);
-      }
+      await axios.post("/questionform", data);
     } catch (ex) {
       if (ex.response && ex.response.status === 422) {
         setErrors(ex.response.data.errors);
@@ -125,11 +159,23 @@ export const AuthProvider = ({ children }) => {
     setErrors([]);
     setStatus(null);
     try {
-      const response = await axios.post("/addsurvey", data);
-
-      if (response.status === 200) {
-        setStatus(response.data);
+      await axios.post("/addsurvey", data);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 422) {
+        setErrors(ex.response.data.errors);
+      } else {
+        console.log("An unexpected error occurred:", ex);
       }
+    }
+  };
+
+  const addrole = async ({ ...data }) => {
+    await csrf();
+    setErrors([]);
+    setStatus(null);
+    try {
+      await axios.post("/addrole", data);
+      await getRolesData();
     } catch (ex) {
       if (ex.response && ex.response.status === 422) {
         setErrors(ex.response.data.errors);
@@ -161,8 +207,17 @@ export const AuthProvider = ({ children }) => {
         getQuestions,
         questions,
         getSurveysData,
+        getTermsData,
+        getRoleDetail,
+        roledetail,
+        terms,
+        addrole,
         getSurveyDetail,
         surveydetail,
+        getRolesData,
+        getPermissionsData,
+        permissions,
+        roles,
         surveys,
         login,
         register,

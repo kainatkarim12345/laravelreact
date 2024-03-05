@@ -13,7 +13,8 @@ const QuestionForm = () => {
     { id: 2, text: "" },
   ]);
   const [questionFor, setQuestionFor] = useState("profile");
-  const { questionform, errors, status, setErrors } = useAuthContext();
+  const { questionform, errors, setErrors } = useAuthContext();
+  const [status, setStatus] = useState("Question created");
 
   const setValidation = (field, message) => {
     setErrors((prevErrors) => ({
@@ -80,7 +81,13 @@ const QuestionForm = () => {
     }
 
     questionform(formData);
-
+    swal({
+      position: "top-end",
+      icon: "success",
+      title: status,
+      showConfirmButton: false,
+      timer: 1500
+    });
     setQuestion("");
     setQuestionType("");
     setOptions([]);
@@ -160,13 +167,6 @@ const QuestionForm = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full ">
             <div className="relative mx-auto max-w-[500px] overflow-hidden rounded-lg bg-white py-9 text-center sm:px-12 md:px-[60px]">
-            {status && (
-                  <div className="bg-green-700 m-2 p-2 rounded text-white">
-                    <Stack sx={{ width: '100%' }} spacing={2}>
-                      <Alert severity="success">{status}.</Alert>
-                    </Stack>
-                  </div>
-                )}
               <div className="mb-10 text-center md:mb-16">Add Questions</div>
               <form onSubmit={handleQuestion}>
                 <div className="mb-4">

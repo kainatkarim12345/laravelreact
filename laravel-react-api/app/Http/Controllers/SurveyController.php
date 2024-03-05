@@ -44,17 +44,6 @@ class SurveyController extends Controller
         return response()->json($survey);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -126,9 +115,8 @@ class SurveyController extends Controller
      */
     public function addterms(REQUEST $request)
     {
-        // dd($request);
         $validator = Validator::make($request->all(), [
-            'terms_text' => 'required',
+            'textterm' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -139,7 +127,6 @@ class SurveyController extends Controller
             $term = TermsAndCondition::create([
                 'terms_text' => htmlspecialchars($request->textterm),
             ]);
-            // dd($term);
 
             return response()->json('Terms Created');
         }
@@ -148,9 +135,11 @@ class SurveyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function getTerms(REQUEST $request)
     {
-        //
+        $terms = DB::table('terms_and_conditions')->get();
+     
+        return response()->json($terms);
     }
 
     /**

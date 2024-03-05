@@ -4,8 +4,6 @@ import useAuthContext from "../context/AuthContext";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import dayjs from "dayjs";
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
 
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -29,11 +27,11 @@ const SurveyForm = () => {
     addsurvey,
     errors,
     user,
-    status,
     setErrors,
     getQuestions,
     questions,
   } = useAuthContext();
+  const [status, setStatus] = useState("Your Survey created");
 
   const handleCheckboxChange = (questionId) => {
     if (selectedQuestions.find((q) => q.id === questionId)) {
@@ -67,7 +65,6 @@ const SurveyForm = () => {
 
   const handleSurvey = async (event) => {
     event.preventDefault();
-    // setErrors({});
     let isValid = true;
     const newErrors = {};
 
@@ -161,6 +158,14 @@ const SurveyForm = () => {
       console.log(formData);
       addsurvey(formData);
 
+      swal({
+        position: "top-end",
+        icon: "success",
+        title: status,
+        showConfirmButton: false,
+        timer: 1500
+      });
+
       setName("");
       setSurveyType("");
       setSurveyStatus("");
@@ -186,11 +191,9 @@ const SurveyForm = () => {
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full ">
-              <div className=" text-center md:mb-10">
-                <h1 className="text-2xl md:text-4xl font-bold">
-                  Create Survey
-                </h1>
-              </div>
+            <div className=" text-center md:mb-10">
+              <h1 className="text-2xl md:text-4xl font-bold">Create Survey</h1>
+            </div>
             <div
               className="
                     relative
@@ -206,15 +209,6 @@ const SurveyForm = () => {
                     md:px-[60px]
                     "
             >
-              {status && (
-                  <div className="bg-green-700 m-2 p-2 rounded text-white">
-                    <Stack sx={{ width: '100%' }} spacing={2}>
-                      <Alert severity="success">{status}.</Alert>
-                    </Stack>
-                  </div>
-                )}
-              
-              
               <nav className="rounded bg-indigo-900 text-white px-2 py-2.5 sm:px-4">
                 <div className="container mx-auto flex flex-wrap items-center justify-between">
                   <Link
