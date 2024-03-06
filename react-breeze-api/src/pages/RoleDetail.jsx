@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useAuthContext from "../context/AuthContext";
-import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function RoleDetail(props) {
   const { getRoleDetail, roledetail, getPermissionsData, permissions } = useAuthContext();
@@ -49,6 +43,7 @@ export default function RoleDetail(props) {
     return !match;
   };
 
+
   return (
     <section className="bg-[#F4F7FF] py-10 lg:py-[40px]">
       <div className="container mx-auto">
@@ -66,12 +61,7 @@ export default function RoleDetail(props) {
                       <div className="hidden w-full md:block md:w-auto">
                         <ul className="mt-4 flex flex-col rounded-lg p-4 md:mt-0 md:flex-row md:space-x-8 md:text-sm md:font-medium">
                           <li>
-                          <Link style={{color:'#ff9800'}} to={{ pathname:"/roleedit/"+roledetail[0].id}}>
-                             <EditIcon />
-                          </Link>&nbsp;&nbsp;
-                          <Link style={{color:'red'}} to={{ pathname:"/roledelete"}}>
-                             <DeleteIcon />
-                          </Link>
+                          
                           </li>
                         </ul>
                       </div>

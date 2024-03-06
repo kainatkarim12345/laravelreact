@@ -16,13 +16,33 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Roles = () => {
-  const { getRolesData, roles } = useAuthContext();
+  const { getRolesData, roles, deleteRole } = useAuthContext();
 
   useEffect(() => {
     if (!roles) {
       getRolesData();
     }
   }, []);
+
+  const deleteRecord = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this role!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        deleteRole(id);
+      } else {
+        swal("Role deletion canceled!");
+      }
+    });
+  };
+  
+
+  
 
   return (
     <section className="bg-[#F4F7FF] py-10 lg:py-[40px]">
@@ -85,9 +105,7 @@ const Roles = () => {
                             <Link style={{color:'#ff9800'}} to={{ pathname:"/roleedit/"+role.id}}>
                               <EditIcon />
                             </Link>&nbsp;&nbsp;
-                            <Link style={{color:'red'}} to={{ pathname:"/roledelete/"+role.id}}>
-                              <DeleteIcon />
-                            </Link>&nbsp;&nbsp;
+                            <DeleteIcon style={{color:'red'}} onClick={()=>{deleteRecord(role.id)}}/>&nbsp;&nbsp;
                             <Link to={{ pathname:"/roledetail/"+role.id }}>
                               <VisibilityIcon />
                             </Link>

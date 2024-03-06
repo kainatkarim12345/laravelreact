@@ -56,14 +56,14 @@ export const AuthProvider = ({ children }) => {
     }
   }; 
   
-  // const getRoleDetail = async (id) => {
-  //   try {
-  //     const response = await axios.get(`/roledetail?type=${id}`);
-  //     setRoleDetail(response.data);
-  //   } catch (error) {
-  //     console.log("Error fetching setRoleDetail:", error);
-  //   }
-  // }; 
+  const deleteRole = async (id) => {
+    try {
+      const response = await axios.post(`/deleterole?type=${id}`);
+      await getRolesData();
+    } catch (error) {
+      console.log("Error fetching deleteRole:", error);
+    }
+  }; 
 
   const getSurveysData = async () => {
     try {
@@ -217,6 +217,7 @@ export const AuthProvider = ({ children }) => {
         getSurveysData,
         getTermsData,
         getRoleDetail,
+        deleteRole,
         roledetail,
         terms,
         addrole,

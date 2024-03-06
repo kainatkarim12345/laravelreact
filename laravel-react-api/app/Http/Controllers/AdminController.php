@@ -47,8 +47,6 @@ class AdminController extends Controller
 
             return response()->json('Role successfully created');
         }
-
-        
     }
 
     public function roledetail(REQUEST $request){
@@ -63,5 +61,14 @@ class AdminController extends Controller
                 ->get();
     
         return response()->json($roledata);
+    }
+
+    public function roleDelete(REQUEST $request){
+        
+        $id = $request->query('type');
+
+        Role::whereId($id)->first()->delete();
+        RoleHasPermission::where('role_id',$id)->delete();
+        return response()->json('successfully deleted');
     }
 }
