@@ -14,6 +14,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/getpermissions', [AdminController::class, 'permissions'])->name('getpermissions');
     Route::post('/addrole', [AdminController::class, 'addRole'])->name('addrole');
     Route::get('/roledetail', [AdminController::class, 'roledetail'])->name('roledetail');
+    Route::get('/roleedit', [AdminController::class, 'roleEdit'])->name('roleedit');
+    
     
     Route::post('/questionform', [QuestionController::class, 'store'])->name('questionform');
     Route::post('/termsform', [SurveyController::class, 'addterms'])->name('termsform');

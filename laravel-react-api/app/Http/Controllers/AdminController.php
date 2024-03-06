@@ -61,7 +61,7 @@ class AdminController extends Controller
                 ->select('roles.*','permissions.name')
                 ->where('role_has_permissions.role_id', '=', $roleId)
                 ->get();
-    // dd($roledata);
+    
         return response()->json($roledata);
     }
 }

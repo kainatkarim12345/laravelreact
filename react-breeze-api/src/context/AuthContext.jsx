@@ -50,12 +50,20 @@ export const AuthProvider = ({ children }) => {
   const getRoleDetail = async (id) => {
     try {
       const response = await axios.get(`/roledetail?type=${id}`);
-      // console.log(response.data);
       setRoleDetail(response.data);
     } catch (error) {
       console.log("Error fetching setRoleDetail:", error);
     }
-  };  
+  }; 
+  
+  // const getRoleDetail = async (id) => {
+  //   try {
+  //     const response = await axios.get(`/roledetail?type=${id}`);
+  //     setRoleDetail(response.data);
+  //   } catch (error) {
+  //     console.log("Error fetching setRoleDetail:", error);
+  //   }
+  // }; 
 
   const getSurveysData = async () => {
     try {

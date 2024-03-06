@@ -9,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Button from "@mui/material/Button";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -31,14 +33,14 @@ const Roles = () => {
               className="
                   relative
                   mx-auto
-                  max-w-[1200px]
+                  max-w-[900px]
                   overflow-hidden
                   rounded-lg
                   bg-white
                   py-9
                   text-center
                   sm:px-12
-                  md:px-[20px]
+                  md:px-[10px]
                   "
             >
               <h1 className="text-2xl md:text-4xl font-bold">
@@ -60,9 +62,9 @@ const Roles = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="left">Sr.</TableCell>
-                      <TableCell align="left">Role</TableCell>
-                      <TableCell align="left">Action</TableCell>
+                      <TableCell>Sr.</TableCell>
+                      <TableCell>Role</TableCell>
+                      <TableCell>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   {roles &&
@@ -75,11 +77,17 @@ const Roles = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell align="left">{++index}</TableCell>
-                          <TableCell align="left" scope="row">
+                          <TableCell>{++index}</TableCell>
+                          <TableCell scope="row">
                             {role.role}
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell>
+                            <Link style={{color:'#ff9800'}} to={{ pathname:"/roleedit/"+role.id}}>
+                              <EditIcon />
+                            </Link>&nbsp;&nbsp;
+                            <Link style={{color:'red'}} to={{ pathname:"/roledelete/"+role.id}}>
+                              <DeleteIcon />
+                            </Link>&nbsp;&nbsp;
                             <Link to={{ pathname:"/roledetail/"+role.id }}>
                               <VisibilityIcon />
                             </Link>

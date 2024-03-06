@@ -5,6 +5,7 @@ import ProfileForm from './pages/ProfileForm';
 import QuestionForm from "./pages/QuestionForm";
 import TermsForm from "./pages/TermsForm";
 import RoleForm from "./pages/RoleForm";
+import RoleEdit from "./pages/RoleEdit";
 import Terms from "./pages/Terms";
 import Roles from "./pages/Roles";
 import GetSurveys from "./pages/GetSurveys";
@@ -34,6 +35,7 @@ function App() {
             <Route path="/getsurveys" element={<GetSurveys />} />
             <Route path="/surveydetail/:id" element={<SurveyDetail />} />
             <Route path="/roledetail/:id" element={<RoleDetail />} />
+            <Route path="/roleedit/:id" element={<RoleEdit />} />
             <Route path="/" element={<Home />} />
           </Route>
           
