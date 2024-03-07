@@ -152,10 +152,10 @@ const AuthLayout = () => {
                     <Link to="/getusers">Users</Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose2}>
-                    <Link to="/userform">Add User</Link>
+                    <Link to="/getemployees">Employees</Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose2}>
-                    <Link to="#">Add refferal</Link>
+                    <Link to="/employeeform">Add Employee</Link>
                   </MenuItem>
                 </Menu>
               </li>

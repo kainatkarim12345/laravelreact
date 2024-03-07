@@ -11,6 +11,8 @@ export const AuthProvider = ({ children }) => {
   const [questions, setQuestions] = useState(null);
   const [surveydetail, setSurveyDetail] = useState(null);
   const [roledetail, setRoleDetail] = useState(null);
+  const [employeedetail, setEmployeeDetail] = useState(null);
+  const [employees, setEmployees] = useState("");
   const [surveys, setSurveys] = useState("");
   const [terms, setTerms] = useState("");
   const [permissions, setPermissions] = useState("");
@@ -55,6 +57,16 @@ export const AuthProvider = ({ children }) => {
       console.log("Error fetching setRoleDetail:", error);
     }
   }; 
+
+  const getEmployeeDetail = async (id) => {
+    try {
+      const response = await axios.get(`/employeedetail?type=${id}`);
+      // console.log(response.data);
+      setEmployeeDetail(response.data);
+    } catch (error) {
+      console.log("Error fetching employeedetail:", error);
+    }
+  }; 
   
   const deleteRole = async (id) => {
     try {
@@ -92,6 +104,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getEmployeesData = async () => {
+    try {
+      const response = await axios.get("/getemployees");
+      setEmployees(response.data);
+    } catch (error) {
+      console.log("Error fetching employees:", error);
+    }
+  };
+
   const getPermissionsData = async () => {
     try {
       const response = await axios.get("/getpermissions");
@@ -124,6 +145,19 @@ export const AuthProvider = ({ children }) => {
       await axios.post("/register", data);
       await getUser();
       navigate("/");
+    } catch (e) {
+      if (e.response.status === 422) {
+        setErrors(e.response.data.errors);
+      }
+    }
+  };
+
+  const addemployee = async ({ ...data }) => {
+    await csrf();
+    setErrors([]);
+    try {
+      await axios.post("/addemployee", data);
+      await getEmployeesData();
     } catch (e) {
       if (e.response.status === 422) {
         setErrors(e.response.data.errors);
@@ -218,11 +252,16 @@ export const AuthProvider = ({ children }) => {
         getTermsData,
         getRoleDetail,
         deleteRole,
+        employees,
+        employeedetail,
+        getEmployeesData,
         roledetail,
+        getEmployeeDetail,
         terms,
         addrole,
         getSurveyDetail,
         surveydetail,
+        addemployee,
         getRolesData,
         getPermissionsData,
         permissions,

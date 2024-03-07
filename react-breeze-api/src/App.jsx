@@ -5,12 +5,15 @@ import ProfileForm from './pages/ProfileForm';
 import QuestionForm from "./pages/QuestionForm";
 import TermsForm from "./pages/TermsForm";
 import RoleForm from "./pages/RoleForm";
+import EmployeeForm from "./pages/EmployeeForm";
 import RoleEdit from "./pages/RoleEdit";
 import Terms from "./pages/Terms";
+import GetEmployees from "./pages/GetEmployees";
 import Roles from "./pages/Roles";
 import GetSurveys from "./pages/GetSurveys";
 import SurveyDetail from "./pages/SurveyDetail";
 import RoleDetail from "./pages/RoleDetail";
+import EmployeeDetail from "./pages/EmployeeDetail";
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from "./pages/ForgotPassword";
@@ -29,12 +32,15 @@ function App() {
             <Route path="/profileform" element={<ProfileForm />} />
             <Route path="/questionform" element={<QuestionForm />} />
             <Route path="/termsform" element={<TermsForm />} />
+            <Route path="/employeeform" element={<EmployeeForm />} />
             <Route path="/roleform" element={<RoleForm />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/getemployees" element={<GetEmployees />} />
             <Route path="/roles" element={<Roles />} />
             <Route path="/getsurveys" element={<GetSurveys />} />
             <Route path="/surveydetail/:id" element={<SurveyDetail />} />
             <Route path="/roledetail/:id" element={<RoleDetail />} />
+            <Route path="/employeedetail/:id" element={<EmployeeDetail />} />
             <Route path="/roleedit/:id" element={<RoleEdit />} />
             <Route path="/" element={<Home />} />
           </Route>

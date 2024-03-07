@@ -5,14 +5,29 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\UserHasRole;
 use App\Models\Permission;
 use App\Models\RoleHasPermission;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
     public function roles(){
         $roles = Role::all();
         return response()->json($roles);
+    }
+
+    public function employees(){
+       
+        $employees = DB::table('users')
+                        ->join('user_has_roles', 'user_has_roles.user_id', '=', 'users.id')
+                        ->join('roles', 'roles.id', '=', 'user_has_roles.role_id')
+                        ->select('users.*','roles.role')
+                        ->get();
+                        
+        return response()->json($employees);
     }
 
     public function permissions(){
@@ -63,6 +78,34 @@ class AdminController extends Controller
         return response()->json($roledata);
     }
 
+    public function employeedetail(REQUEST $request){
+        
+        $employeeId = $request->query('type');
+
+        $employees = DB::table('users')
+                ->join('user_has_roles', 'user_has_roles.user_id', '=', 'users.id')
+                ->join('roles', 'roles.id', '=', 'user_has_roles.role_id')
+                ->select('users.*','roles.role','users.id as user_id','roles.id as role_id')
+                ->where('users.id', '=', $employeeId)
+                ->get();
+
+                $roleId = $employees->pluck('role_id');
+                $roleIdsArray = $roleId->toArray();
+
+        $permissions = DB::table('role_has_permissions')
+                ->join('permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
+                ->select('permissions.name')
+                ->where('role_has_permissions.role_id', '=', $roleIdsArray)
+                ->get();
+// dd($permissions);
+                // return response()->json([
+                //     'employees' => $employees,
+                //     'role_has_permissions' => 'hihi',
+                // ]);
+
+        return response()->json($employees);
+    }
+
     public function roleDelete(REQUEST $request){
         
         $id = $request->query('type');
@@ -71,4 +114,57 @@ class AdminController extends Controller
         RoleHasPermission::where('role_id',$id)->delete();
         return response()->json('successfully deleted');
     }
+    
+
+    public function addEmployee(REQUEST $request){
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'city' => 'required',
+            'role' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422); 
+        } else {
+
+            $user = new User();
+            $user->name = $request->name;
+            $user->user_name = $request->username;
+            $user->email = $request->email;
+            $user->city = $request->city;
+            $user->city = $request->city;
+            $user->referral_count = '0';
+            $user->provider = 'by_admin';
+            $user->password = Hash::make($request->password);
+            $user->referral_link = Str::random(5);
+            $user->save();
+            $user_id = $user->id;
+
+            $userhasrole = new UserHasRole();
+            $userhasrole->user_id = $user_id;
+            $userhasrole->role_id = $request->role;
+            $userhasrole->save();
+
+            $details = [
+
+                'title' => 'Mail from SurveyApp.com',
+        
+                'body' => 'Your account created successfully, password is'.' '.$request->password,
+        
+            ];
+        
+           
+        
+            \Mail::to($request->email)->send(new \App\Mail\MyTestMail($details));
+
+            return response()->json('Employee created successfully');
+        }
+    }
+
 }

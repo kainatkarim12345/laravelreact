@@ -22,11 +22,17 @@ class QuestionController extends Controller
     {
         $surveyType = $request->query('type');
         
+        // $questions = DB::table('questions')
+        //             ->select('option.*','questions.*', 'question.id AS question_id')
+        //             ->join('options', 'options.questions_id', '=', 'questions.id')
+        //             ->select('questions.id as question_id', 'questions.question', 'questions.question_type', 'questions.question_for', 'options.option_text')
+        //             ->where('questions.question_for', '=', $surveyType)
+        //             ->get();
+
         $questions = DB::table('questions')
                     ->select('option.*','questions.*', 'question.id AS question_id')
                     ->join('options', 'options.questions_id', '=', 'questions.id')
                     ->select('questions.id as question_id', 'questions.question', 'questions.question_type', 'questions.question_for', 'options.option_text')
-                    ->where('questions.question_for', '=', $surveyType)
                     ->get();
 
         $groupedQuestions = [];
