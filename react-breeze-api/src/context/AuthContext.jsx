@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post("/login", data);
       await getUser();
-      navigate("/");
+      navigate("/dashboard");
     } catch (ex) {
       if (ex.response && ex.response.status === 422) {
         setErrors(ex.response.data.errors);
@@ -144,7 +144,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await axios.post("/register", data);
       await getUser();
-      navigate("/");
+      navigate("/dashboard");
     } catch (e) {
       if (e.response.status === 422) {
         setErrors(e.response.data.errors);

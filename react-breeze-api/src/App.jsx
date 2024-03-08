@@ -42,7 +42,7 @@ function App() {
             <Route path="/roledetail/:id" element={<RoleDetail />} />
             <Route path="/employeedetail/:id" element={<EmployeeDetail />} />
             <Route path="/roleedit/:id" element={<RoleEdit />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Home />} />
           </Route>
           
           <Route element={<GuestLayout />}>

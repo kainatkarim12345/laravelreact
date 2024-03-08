@@ -87,7 +87,7 @@ const AuthLayout = () => {
       <nav className="rounded bg-indigo-900 text-white px-2 py-2.5 sm:px-4">
         <div className="container-fluid mx-auto flex flex-wrap items-center justify-between">
           <Link
-            to="/"
+            to="/dashboard"
             className="block rounded py-2 pr-4 pl-3 text-white"
             aria-current="page"
           >

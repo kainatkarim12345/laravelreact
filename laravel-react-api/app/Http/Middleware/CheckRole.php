@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class CheckRole
+{
+    public function handle(Request $request, Closure $next)
+    {
+        $user_id = $request->user()->id;
+        $user = $request->user();
+
+        $userRoles = DB::table('user_has_roles')
+                    ->join('users','users.id','=','user_has_roles.user_id')
+                    ->join('roles','roles.id','=','user_has_roles.role_id')
+                    ->where('user_has_roles.user_id', $user_id)
+                    ->select('roles.role')
+                    ->pluck('role');
+
+        if ($userRoles->isEmpty()) {
+            return redirect('/'); 
+        }
+        
+        $firstRole = $userRoles[0];
+        
+        switch ($firstRole) {
+            case 'Administration':
+                $response = [
+                    'user' => $user,
+                    'role' => $firstRole
+                ];
+                return response()->json($response);
+            case 'Viewer':
+                $response = [
+                    'user' => $user,
+                    'role' => $firstRole
+                ];
+                return response()->json($response);
+
+            case 'Editor':
+                $response = [
+                    'user' => $user,
+                    'role' => $firstRole
+                ];
+                return response()->json($response);
+
+            default:
+                return redirect('/login');
+        }
+    }
+}

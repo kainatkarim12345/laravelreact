@@ -7,16 +7,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
 
-// Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-
-
-        
-
-Route::middleware(['auth:sanctum'])->group(function(){
+Route::middleware(['auth:sanctum', 'role'])->group(function(){
     Route::get('/user', function (Request $request) { return $request->user(); });
     
 });
