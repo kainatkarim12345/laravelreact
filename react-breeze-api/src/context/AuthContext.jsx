@@ -165,6 +165,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const employeestatuschange = async ({ ...data }) => {
+    await csrf();
+    setErrors([]);
+    try {
+      await axios.post("/employeestatuschange", data);
+      await getEmployeesData();
+    } catch (e) {
+      if (e.response.status === 422) {
+        setErrors(e.response.data.errors);
+      }
+    }
+  };
+
   const termsform = async ({ ...data }) => {
     await csrf();
     setErrors([]);
@@ -271,6 +284,7 @@ export const AuthProvider = ({ children }) => {
         register,
         status,
         questionform,
+        employeestatuschange,
         termsform,
         addsurvey,
         logout,

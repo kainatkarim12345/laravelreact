@@ -1,14 +1,12 @@
-import useAuthContext from "../../context/AuthContext";
-import {useEffect} from "react";
+import React from "react";
 
-const AdminDashboard = () => {
-    const {user, getUser } = useAuthContext();
-    useEffect(()=>{
-        if(!user){
-            getUser();
-        }
-    },[]);
-    return <div>hiiiiiiiiiiiiiiiiiiiiii</div>;
-};
+function AdministrationDashboard() {
+  return (
+    <div>
+      <h1>Administration Dashboard</h1>
+      
+    </div>
+  );
+}
 
-export default AdminDashboard;
+export default AdministrationDashboard;

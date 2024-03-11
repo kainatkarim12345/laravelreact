@@ -11,6 +11,7 @@ use App\Models\Permission;
 use App\Models\RoleHasPermission;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -22,10 +23,13 @@ class AdminController extends Controller
     public function employees(){
        
         $employees = DB::table('users')
-                        ->join('user_has_roles', 'user_has_roles.user_id', '=', 'users.id')
-                        ->join('roles', 'roles.id', '=', 'user_has_roles.role_id')
-                        ->select('users.*','roles.role')
-                        ->get();
+            ->join('user_has_roles', 'user_has_roles.user_id', '=', 'users.id')
+            ->join('roles', 'roles.id', '=', 'user_has_roles.role_id')
+            ->select('users.*', 'roles.role')
+            ->where('users.id', '!=', Auth::user()->id)
+            ->latest()
+            ->get();
+
                         
         return response()->json($employees);
     }
@@ -97,11 +101,6 @@ class AdminController extends Controller
                 ->select('permissions.name')
                 ->where('role_has_permissions.role_id', '=', $roleIdsArray)
                 ->get();
-// dd($permissions);
-                // return response()->json([
-                //     'employees' => $employees,
-                //     'role_has_permissions' => 'hihi',
-                // ]);
 
         return response()->json($employees);
     }
@@ -133,6 +132,8 @@ class AdminController extends Controller
             ], 422); 
         } else {
 
+            $defaultRole = '20';
+
             $user = new User();
             $user->name = $request->name;
             $user->user_name = $request->username;
@@ -146,24 +147,41 @@ class AdminController extends Controller
             $user->save();
             $user_id = $user->id;
 
+            $role = $request->has('role') ? $request->role : $defaultRole;
+
             $userhasrole = new UserHasRole();
             $userhasrole->user_id = $user_id;
             $userhasrole->role_id = $request->role;
             $userhasrole->save();
 
             $details = [
-
                 'title' => 'Mail from SurveyApp.com',
-        
                 'body' => 'Your account created successfully, password is'.' '.$request->password,
-        
             ];
-        
-           
         
             \Mail::to($request->email)->send(new \App\Mail\MyTestMail($details));
 
             return response()->json('Employee created successfully');
+        }
+    }
+
+    public function employeeStatusChange(REQUEST $request){
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'selectedStatus' => 'required',
+            'employeeId' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422); 
+        } else {
+
+            
+            $user = User::where('id',$request->employeeId)->update(['status'=>$request->selectedStatus]);
+
+            return response()->json('Employee status changed');
         }
     }
 

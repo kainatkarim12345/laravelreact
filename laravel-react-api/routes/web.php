@@ -20,6 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/deleterole', [AdminController::class, 'roleDelete'])->name('deleterole');
     
     Route::post('/addemployee', [AdminController::class, 'addEmployee'])->name('addemployee');
+    Route::post('/employeestatuschange', [AdminController::class, 'employeeStatusChange'])->name('employeestatuschange');
     
 
     Route::post('/questionform', [QuestionController::class, 'store'])->name('questionform');

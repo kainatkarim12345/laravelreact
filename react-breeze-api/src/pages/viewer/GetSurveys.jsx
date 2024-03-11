@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import useAuthContext from "../context/AuthContext";
+import useAuthContext from "../../context/AuthContext";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -87,7 +87,7 @@ const GetSurveys = () => {
                             {survey.created_at}
                           </TableCell>
                           <TableCell align="right">
-                            {survey.published_at}
+                            {survey.published_at ? survey.published_at : "-"}
                           </TableCell>
                           <TableCell align="right">
                             {survey.is_active}

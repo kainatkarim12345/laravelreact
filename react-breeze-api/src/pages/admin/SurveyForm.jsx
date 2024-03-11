@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import useAuthContext from "../context/AuthContext";
+import useAuthContext from "../../context/AuthContext";
 import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import dayjs from "dayjs";

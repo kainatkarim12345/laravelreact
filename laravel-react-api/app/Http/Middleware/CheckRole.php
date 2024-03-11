@@ -11,45 +11,49 @@ class CheckRole
 {
     public function handle(Request $request, Closure $next)
     {
-        $user_id = $request->user()->id;
-        $user = $request->user();
+        if(Auth::check()){
+            $user_id = $request->user()->id;
+            $user = $request->user();
 
-        $userRoles = DB::table('user_has_roles')
-                    ->join('users','users.id','=','user_has_roles.user_id')
-                    ->join('roles','roles.id','=','user_has_roles.role_id')
-                    ->where('user_has_roles.user_id', $user_id)
-                    ->select('roles.role')
-                    ->pluck('role');
+            $userRoles = DB::table('user_has_roles')
+                        ->join('users','users.id','=','user_has_roles.user_id')
+                        ->join('roles','roles.id','=','user_has_roles.role_id')
+                        ->where('user_has_roles.user_id', $user_id)
+                        ->select('roles.role')
+                        ->pluck('role');
 
-        if ($userRoles->isEmpty()) {
-            return redirect('/'); 
-        }
-        
-        $firstRole = $userRoles[0];
-        
-        switch ($firstRole) {
-            case 'Administration':
-                $response = [
-                    'user' => $user,
-                    'role' => $firstRole
-                ];
-                return response()->json($response);
-            case 'Viewer':
-                $response = [
-                    'user' => $user,
-                    'role' => $firstRole
-                ];
-                return response()->json($response);
+            if ($userRoles->isEmpty()) {
+                return redirect('/'); 
+            }
+            
+            $firstRole = $userRoles[0];
+            
+            switch ($firstRole) {
+                case 'Administration':
+                    $response = [
+                        'user' => $user,
+                        'role' => $firstRole
+                    ];
+                    return response()->json($response);
+                case 'Viewer':
+                    $response = [
+                        'user' => $user,
+                        'role' => $firstRole
+                    ];
+                    return response()->json($response);
 
-            case 'Editor':
-                $response = [
-                    'user' => $user,
-                    'role' => $firstRole
-                ];
-                return response()->json($response);
+                case 'Editor':
+                    $response = [
+                        'user' => $user,
+                        'role' => $firstRole
+                    ];
+                    return response()->json($response);
 
-            default:
-                return redirect('/login');
+                default:
+                    return redirect('/login');
+            }
+        }else{
+            return redirect('/login');
         }
     }
 }
