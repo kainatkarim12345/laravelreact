@@ -23,9 +23,9 @@ class AdminController extends Controller
     public function employees(){
        
         $employees = DB::table('users')
-            ->join('user_has_roles', 'user_has_roles.user_id', '=', 'users.id')
-            ->join('roles', 'roles.id', '=', 'user_has_roles.role_id')
-            ->select('users.*', 'roles.role')
+            ->join('user_roles', 'user_roles.user_id', '=', 'users.id')
+            ->join('roles', 'roles.id', '=', 'user_roles.role_id')
+            ->select('users.*', 'roles.name')
             ->where('users.id', '!=', Auth::user()->id)
             ->latest()
             ->get();
@@ -53,7 +53,7 @@ class AdminController extends Controller
         } else {
 
             $role = new Role();
-            $role->role = $request->role;
+            $role->name = $request->role;
             $role->save();
             $role_id = $role->id;
 
@@ -87,9 +87,9 @@ class AdminController extends Controller
         $employeeId = $request->query('type');
 
         $employees = DB::table('users')
-                ->join('user_has_roles', 'user_has_roles.user_id', '=', 'users.id')
-                ->join('roles', 'roles.id', '=', 'user_has_roles.role_id')
-                ->select('users.*','roles.role','users.id as user_id','roles.id as role_id')
+                ->join('user_roles', 'user_roles.user_id', '=', 'users.id')
+                ->join('roles', 'roles.id', '=', 'user_roles.role_id')
+                ->select('users.*','roles.name','users.id as user_id','roles.id as role_id')
                 ->where('users.id', '=', $employeeId)
                 ->get();
 

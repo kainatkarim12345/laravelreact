@@ -15,12 +15,12 @@ class CheckRole
             $user_id = $request->user()->id;
             $user = $request->user();
 
-            $userRoles = DB::table('user_has_roles')
-                        ->join('users','users.id','=','user_has_roles.user_id')
-                        ->join('roles','roles.id','=','user_has_roles.role_id')
-                        ->where('user_has_roles.user_id', $user_id)
-                        ->select('roles.role')
-                        ->pluck('role');
+            $userRoles = DB::table('user_roles')
+                        ->join('users','users.id','=','user_roles.user_id')
+                        ->join('roles','roles.id','=','user_roles.role_id')
+                        ->where('user_roles.user_id', $user_id)
+                        ->select('roles.name')
+                        ->pluck('name');
 
             if ($userRoles->isEmpty()) {
                 return redirect('/'); 

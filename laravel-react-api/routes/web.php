@@ -7,6 +7,27 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\AdminController;
+use App\Models\{User,Role,Permission};
+
+// Route::get('/', function(){
+//     $admin = User::whereName('Ali')->with('roles')->first();
+//     // $admin_role = Role::whereName('Administration')->first();
+//     // $admin->roles()->attach($admin_role);
+//     // if($admin->hasRole('Administration')){
+//     //     dd('yes user has admin role');
+//     // }
+//     // dd($admin->toArray());
+
+//     // $user_permission = Permission::where('name', 'view_user')->first(); added permission
+//     // $admin_role = Role::whereName('Administration')->with('permissions')->first(); 
+    
+//     // $admin_role->permissions();
+//     // dd($admin_role->toArray());
+
+//     // $users = User::with('roles.permissions')->get();
+//     $users = User::with('roles.permissions')->get();
+//     // dd($users[0]->roles->toArray()); specific user info with roles permisions
+// });
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
