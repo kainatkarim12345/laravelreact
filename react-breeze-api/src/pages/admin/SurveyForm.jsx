@@ -155,7 +155,6 @@ const SurveyForm = () => {
     };
 
     if (formData) {
-      console.log(formData);
       addsurvey(formData);
 
       swal({
