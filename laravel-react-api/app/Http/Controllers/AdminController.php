@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\UserHasRole;
+use App\Models\UserRole;
 use App\Models\Permission;
 use App\Models\RoleHasPermission;
 use Illuminate\Support\Facades\Hash;
@@ -75,10 +75,10 @@ class AdminController extends Controller
         $roledata = DB::table('role_has_permissions')
                 ->join('roles', 'roles.id', '=', 'role_has_permissions.role_id')
                 ->join('permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                ->select('roles.*','permissions.name')
+                ->select('roles.*','roles.name as role_name','permissions.name')
                 ->where('role_has_permissions.role_id', '=', $roleId)
                 ->get();
-    
+
         return response()->json($roledata);
     }
 
@@ -149,7 +149,7 @@ class AdminController extends Controller
 
             $role = $request->has('role') ? $request->role : $defaultRole;
 
-            $userhasrole = new UserHasRole();
+            $userhasrole = new UserRole();
             $userhasrole->user_id = $user_id;
             $userhasrole->role_id = $request->role;
             $userhasrole->save();
@@ -166,15 +166,16 @@ class AdminController extends Controller
     }
 
     public function employeeStatusChange(REQUEST $request){
-        // dd($request);
+
         $validator = Validator::make($request->all(), [
-            'selectedStatus' => 'required',
+            'selectedStatus' => 'required|in:pending,approved,disapproved',
             'employeeId' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
+                'validOptions' => ['pending', 'approved', 'disapproved']
             ], 422); 
         } else {
 

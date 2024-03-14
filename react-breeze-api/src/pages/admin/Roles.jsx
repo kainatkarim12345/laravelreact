@@ -99,7 +99,7 @@ const Roles = () => {
                         >
                           <TableCell>{++index}</TableCell>
                           <TableCell scope="row">
-                            {role.role}
+                            {role.name}
                           </TableCell>
                           <TableCell>
                             <Link style={{color:'#ff9800'}} to={{ pathname:"/roleedit/"+role.id}}>

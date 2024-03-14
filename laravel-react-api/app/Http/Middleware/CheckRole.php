@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,14 +14,15 @@ class CheckRole
     {
         if(Auth::check()){
             $user_id = $request->user()->id;
-            $user = $request->user();
-
+           
             $userRoles = DB::table('user_roles')
                         ->join('users','users.id','=','user_roles.user_id')
                         ->join('roles','roles.id','=','user_roles.role_id')
                         ->where('user_roles.user_id', $user_id)
                         ->select('roles.name')
                         ->pluck('name');
+
+            $user = User::with('roles.permissions')->where('users.id','=', $request->user()->id)->get();
 
             if ($userRoles->isEmpty()) {
                 return redirect('/'); 

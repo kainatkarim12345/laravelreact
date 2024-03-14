@@ -14,7 +14,7 @@ import ProfileForm from './pages/ProfileForm';
 import QuestionForm from "./pages/admin/QuestionForm";
 import TermsForm from "./pages/admin/TermsForm";
 import SurveyForm from "./pages/admin/SurveyForm";
-// import RoleForm from "./pages/admin/RoleForm";
+import RoleForm from "./pages/admin/RoleForm";
 import EmployeeForm from "./pages/admin/EmployeeForm";
 import RoleEdit from "./pages/admin/RoleEdit";
 import Terms from "./pages/admin/Terms";
@@ -55,7 +55,7 @@ const App = () => {
             <Route path="/questionform" element={<QuestionForm />} />
             <Route path="/termsform" element={<TermsForm />} />
             <Route path="/employeeform" element={<EmployeeForm />} />
-            {/* <Route path="/roleform" element={<RoleForm />} /> */}
+            <Route path="/roleform" element={<RoleForm />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/getemployees" element={<GetEmployees />} />
             <Route path="roles" element={<Roles />} />

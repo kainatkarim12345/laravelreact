@@ -21,13 +21,6 @@ class QuestionController extends Controller
     public function getQuestions(Request $request)
     {
         $surveyType = $request->query('type');
-        
-        // $questions = DB::table('questions')
-        //             ->select('option.*','questions.*', 'question.id AS question_id')
-        //             ->join('options', 'options.questions_id', '=', 'questions.id')
-        //             ->select('questions.id as question_id', 'questions.question', 'questions.question_type', 'questions.question_for', 'options.option_text')
-        //             ->where('questions.question_for', '=', $surveyType)
-        //             ->get();
 
         $questions = DB::table('questions')
                     ->select('option.*','questions.*', 'question.id AS question_id')
@@ -62,18 +55,21 @@ class QuestionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'question' => 'required',
-            'question_for' => 'required',
+            'question_for' => 'required|in:survey,profile',
             'question_type' => 'required|in:MCQs,Text Field,True/False',
             'options.*' => 'required_if:question_type,MCQs',
             'text_field' => 'required_if:question_type,Text Field',
             'true_false' => 'required_if:question_type,True/False|in:True,False',
         ]);
-
+        
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
+                'validOptions' => ['MCQs','Text Field','True/False'],
+                'validQuestionFor' => ['survey', 'profile'],
             ], 422); 
-        } else {
+        }
+         else {
             if($request->question_for === 'survey'){
                 $question_for = $request->question_for;
             }else{

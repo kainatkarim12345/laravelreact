@@ -4,7 +4,7 @@ import { useEffect } from "react";
 const Home = () => {
     const { user, getUser } = useAuthContext();
     useEffect(() => {
-        // console.log(user);
+        console.log(user);
         if (!user) {
             getUser();
         }
